@@ -10,13 +10,11 @@ feature 'restaurants' do
   end
 
   context 'restaurants have been added' do
-    before do
-      Restaurant.create(name: 'KFC')
-    end
+    let!(:restaurant) { create(:restaurant) }
 
     scenario 'display restaurants' do
       visit '/restaurants'
-      expect(page).to have_content 'KFC'
+      expect(page).to have_content 'Fat Duck'
       expect(page).not_to have_content 'No restaurants yet'
     end
   end
