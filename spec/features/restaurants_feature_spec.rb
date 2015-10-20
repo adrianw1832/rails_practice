@@ -39,6 +39,18 @@ feature 'restaurants' do
       expect(page).to have_content 'Fat Duck'
       expect(current_path).to eq "/restaurants/#{restaurant.id}"
     end
+  end
 
+  context 'editing restaurants' do
+    let!(:restaurant) { create(:restaurant) }
+
+    scenario 'let a user edit a restaurant' do
+      visit '/restaurants'
+      click_link 'Edit Fat Duck'
+      fill_in 'Name', with: 'Waterside Inn'
+      click_button 'Update Restaurant'
+      expect(page).to have_content 'Waterside Inn'
+      expect(current_path).to eq '/restaurants'
+    end
   end
 end
