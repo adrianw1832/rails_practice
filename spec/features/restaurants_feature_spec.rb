@@ -30,6 +30,15 @@ feature 'restaurants' do
     end
   end
 
+  scenario 'does not allow user to submit a name that is too short' do
+    visit restaurants_path
+    click_link 'Add a restaurant'
+    fill_in 'Name', with: 'Fa'
+    click_button 'Create Restaurant'
+    expect(page).not_to have_css 'h2', text: 'Fa'
+    expect(page).to have_content 'error'
+  end
+
   context 'viewing restaurants' do
     let!(:restaurant) { create(:restaurant) }
 
