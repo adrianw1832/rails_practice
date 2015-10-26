@@ -65,17 +65,28 @@ feature 'restaurants' do
   end
 
   context 'editing restaurants' do
-    let!(:restaurant) { create(:restaurant) }
     let(:user) { create(:user) }
+    let(:user2) { create(:user, email: 'test2@test.com') }
+    let!(:restaurant) { create(:restaurant, user: user) }
 
-    scenario 'let a user edit a restaurant' do
-      sign_in_as(user)
-      visit '/restaurants'
-      click_link 'Edit Fat Duck'
-      fill_in 'Name', with: 'Waterside Inn'
-      click_button 'Update Restaurant'
-      expect(page).to have_content 'Waterside Inn'
-      expect(current_path).to eq '/restaurants'
+    context 'user is logged in' do
+      scenario 'lets only the original user edit a restaurant' do
+        sign_in_as(user)
+        visit '/restaurants'
+        click_link 'Edit Fat Duck'
+        fill_in 'Name', with: 'Waterside Inn'
+        click_button 'Update Restaurant'
+        expect(page).to have_content 'Waterside Inn'
+        expect(current_path).to eq '/restaurants'
+      end
+
+      scenario 'does not allow other users to edit a restaurant' do
+        sign_in_as(user2)
+        visit restaurants_path
+        click_link 'Edit Fat Duck'
+        expect(current_path).to eq restaurants_path
+        expect(page).to have_content "Error! You can't edit this restaurant!"
+      end
     end
 
     context 'user is not logged in' do
@@ -89,8 +100,8 @@ feature 'restaurants' do
   end
 
   context 'deleting restaurants' do
-    let!(:restaurant) { create(:restaurant) }
     let(:user) { create(:user) }
+    let!(:restaurant) { create(:restaurant, user: user) }
 
     context 'user is logged in' do
       scenario 'removes a restaurant when user clicks a delete link' do
