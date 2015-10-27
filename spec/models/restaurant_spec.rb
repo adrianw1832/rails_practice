@@ -33,16 +33,15 @@ describe Restaurant, type: :model do
     end
   end
 
-  let(:edit_params) { {name: 'Fat Goose'} }
-  context 'editing restaurants' do
-    it 'can be edited by its creator' do
-      restaurant.update_as_user(edit_params, user)
-      expect(restaurant.name).to eq 'Fat Goose'
+  context 'deleting restaurants' do
+    it 'can be deleted by its creator' do
+      restaurant.destroy_as_user(user)
+      expect(Restaurant.first).to be nil
     end
 
-    it 'cannot be edited by someone else' do
-      restaurant.update_as_user(edit_params, user2)
-      expect(restaurant.name).to eq 'Fat Duck'
+    it 'cannot be deleted by someone else' do
+      restaurant.destroy_as_user(user2)
+      expect(Restaurant.first).to eq restaurant
     end
   end
 end

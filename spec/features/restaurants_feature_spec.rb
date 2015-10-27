@@ -101,15 +101,24 @@ feature 'restaurants' do
 
   context 'deleting restaurants' do
     let(:user) { create(:user) }
+    let(:user2) { create(:user, email: 'test2@test.com') }
     let!(:restaurant) { create(:restaurant, user: user) }
 
     context 'user is logged in' do
-      scenario 'removes a restaurant when user clicks a delete link' do
+      scenario 'removes a restaurant when the creator clicks a delete link' do
         sign_in_as(user)
         visit restaurants_path
         click_link 'Delete Fat Duck'
         expect(page).not_to have_content 'Fat Duck'
         expect(page).to have_content 'Restaurant deleted successfully'
+      end
+
+      scenario 'does not allow other users to delete a restaurant' do
+        sign_in_as(user2)
+        visit restaurants_path
+        click_link 'Delete Fat Duck'
+        expect(current_path).to eq restaurants_path
+        expect(page).to have_content "Error! You can't delete this restaurant!"
       end
     end
 
