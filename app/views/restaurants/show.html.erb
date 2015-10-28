@@ -1,5 +1,8 @@
-<p><%= @restaurant.name %></p>
-<p><%= @restaurant.description %></p>
+<h1><%= @restaurant.name %></h1>
+<h1><%= @restaurant.description %></h1>
+<% unless @restaurant.reviews.find_by(user_id: current_user).present? %>
+  <%= link_to "Review #{@restaurant.name}", new_restaurant_review_path(@restaurant) %>
+<% end %>
 
 <% if @restaurant.reviews.any? %>
   <% @restaurant.reviews.each do |review| %>
