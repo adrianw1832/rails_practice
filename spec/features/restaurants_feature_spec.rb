@@ -83,7 +83,8 @@ feature 'restaurants' do
       scenario 'does not allow other users to edit a restaurant' do
         sign_in_as(user2)
         visit restaurants_path
-        click_link 'Edit Fat Duck'
+        expect(page).not_to have_link 'Edit Fat Duck'
+        visit edit_restaurant_path(restaurant)
         expect(current_path).to eq restaurants_path
         expect(page).to have_content "Error! You can't edit this restaurant!"
       end
@@ -116,19 +117,7 @@ feature 'restaurants' do
       scenario 'does not allow other users to delete a restaurant' do
         sign_in_as(user2)
         visit restaurants_path
-        click_link 'Delete Fat Duck'
-        expect(current_path).to eq restaurants_path
-        expect(page).to have_content "Error! You can't delete this restaurant!"
-      end
-    end
-
-    context 'user is not logged in' do
-      scenario 'redirects user to log in page' do
-        visit restaurants_path
-        click_link 'Delete Fat Duck'
-        expect(current_path).to eq new_user_session_path
-        expect(page).to have_content 'Email'
-        expect(page).to have_content 'Password'
+        expect(page).not_to have_link 'Delete Fat Duck'
       end
     end
   end
