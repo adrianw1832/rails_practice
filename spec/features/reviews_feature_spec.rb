@@ -58,12 +58,14 @@ feature 'review' do
     end
   end
 
-  def leave_review(thoughts, rating)
-    visit restaurants_path
-    click_link 'Fat Duck'
-    click_link 'Review Fat Duck'
-    fill_in 'Thoughts', with: thoughts
-    select rating, from: 'Rating'
-    click_button 'Leave Review'
+  context 'average rating' do
+    scenario 'displays an average rating for all reviews' do
+      sign_in_as(user)
+      leave_review('so so', '3')
+      click_link 'Sign out'
+      sign_in_as(user2)
+      leave_review('great', '5')
+      expect(page).to have_content('average rating: 4')
+    end
   end
 end
