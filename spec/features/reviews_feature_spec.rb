@@ -8,24 +8,14 @@ feature 'review' do
   context 'when user are signed in' do
     scenario 'allow users to leave review using a form' do
       sign_in_as(user)
-      visit restaurants_path
-      click_link 'Fat Duck'
-      click_link 'Review Fat Duck'
-      fill_in 'Thoughts', with: 'amazing'
-      select '5', from: 'Rating'
-      click_button 'Leave Review'
+      leave_review('amazing', '5')
       expect(current_path).to eq restaurant_path(restaurant)
       expect(page).to have_content 'amazing'
     end
 
     scenario 'allow users to only leave one review' do
       sign_in_as(user)
-      visit restaurants_path
-      click_link 'Fat Duck'
-      click_link 'Review Fat Duck'
-      fill_in 'Thoughts', with: 'amazing'
-      select '5', from: 'Rating'
-      click_button 'Leave Review'
+      leave_review('amazing', '5')
       visit restaurants_path
       expect(page).not_to have_content 'Review Fat Duck'
       visit new_restaurant_review_path(restaurant)
@@ -47,12 +37,7 @@ feature 'review' do
   context 'user is logged in' do
     before do
       sign_in_as(user)
-      visit restaurants_path
-      click_link 'Fat Duck'
-      click_link 'Review Fat Duck'
-      fill_in 'Thoughts', with: 'amazing'
-      select '5', from: 'Rating'
-      click_button 'Leave Review'
+      leave_review('amazing', '5')
       click_link 'Sign out'
     end
 
@@ -71,5 +56,14 @@ feature 'review' do
       click_link 'Fat Duck'
       expect(page).not_to have_link 'Delete review'
     end
+  end
+
+  def leave_review(thoughts, rating)
+    visit restaurants_path
+    click_link 'Fat Duck'
+    click_link 'Review Fat Duck'
+    fill_in 'Thoughts', with: thoughts
+    select rating, from: 'Rating'
+    click_button 'Leave Review'
   end
 end
