@@ -47,7 +47,7 @@ describe Restaurant, type: :model do
 end
 
 describe 'reviews' do
-  describe 'build_with_user' do
+  context 'build_with_user' do
 
     let(:user) { create(:user) }
     let(:restaurant) { create(:restaurant, user: user) }
@@ -67,6 +67,7 @@ end
 
 describe 'average rating' do
   let!(:restaurant) { create(:restaurant) }
+
   context 'no reviews' do
     it 'returns "N/A" when there are no reviews' do
       expect(restaurant.average_rating).to eq 'N/A'
@@ -77,6 +78,16 @@ describe 'average rating' do
     it 'returns that rating' do
       restaurant.reviews.create(rating: 4)
       expect(restaurant.average_rating).to eq 4
+    end
+  end
+
+  context 'multiple reviews' do
+    let(:user) { create(:user, email: 'test2@test.com') }
+
+    it 'returns the average' do
+      restaurant.reviews.create(rating: 5)
+      restaurant.reviews.create(rating: 1, user: user)
+      expect(restaurant.average_rating).to eq 3
     end
   end
 end
