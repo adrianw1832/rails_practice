@@ -65,7 +65,8 @@ feature 'review' do
       click_link 'Sign out'
       sign_in_as(user2)
       leave_review('great', '5')
-      expect(page).to have_content('average rating: 4')
+      visit restaurants_path
+      expect(page).to have_content('Average rating: 4')
     end
   end
 end
