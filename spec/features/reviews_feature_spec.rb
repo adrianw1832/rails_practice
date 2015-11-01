@@ -66,7 +66,7 @@ feature 'review' do
       sign_in_as(user2)
       leave_review('great', '5')
       visit restaurants_path
-      expect(page).to have_content('Average rating: 4')
+      expect(page).to have_content('Average rating: ★★★★☆')
     end
   end
 end
