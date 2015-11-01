@@ -69,4 +69,12 @@ feature 'review' do
       expect(page).to have_content('Average rating: ★★★★☆')
     end
   end
+
+  context 'created since' do
+    scenario 'displays the time since the review has been created' do
+      sign_in_as(user)
+      leave_review('so so', '3')
+      expect(page).to have_content 'Created 0 hours ago'
+    end
+  end
 end
