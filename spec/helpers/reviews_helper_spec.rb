@@ -24,5 +24,15 @@ describe ReviewsHelper, type: :helper do
       review = create(:review)
       expect(helper.created_since(review)).to eq 'Created 0 hours ago'
     end
+
+    it 'returns 1 hour for reviews that have been created for an hour' do
+      review = create(:review, created_at: (Time.now - 3600))
+      expect(helper.created_since(review)).to eq 'Created 1 hour ago'
+    end
+
+    it 'returns 2 hour for reviews that have been created two hours ago' do
+      review = create(:review, created_at: (Time.now - 7200))
+      expect(helper.created_since(review)).to eq 'Created 2 hours ago'
+    end
   end
 end

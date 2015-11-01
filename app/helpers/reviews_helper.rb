@@ -7,7 +7,7 @@ module ReviewsHelper
 
   def created_since(review)
     current_time = Time.now
-    time_difference = (current_time - review.created_at).floor
+    time_difference = ((current_time - review.created_at) / 3600).floor
     'Created ' + pluralize(time_difference, 'hour') + ' ago'
   end
 end
