@@ -8,6 +8,8 @@
   <% @restaurant.reviews.each do |review| %>
     <h2><%= review.thoughts %></h2>
     <h5><%= created_since(review) %></h5>
+    <p><%= pluralize review.endorsements.count, 'endorsement' %></p>
+    <%= link_to "Endorse review", restaurant_review_endorsements_path(@restaurant, review), method: :post %>
     <% if review.user_id == current_user.id %>
       <%= link_to "Delete review", restaurant_review_path(@restaurant, review), method: :delete %>
     <% end %>

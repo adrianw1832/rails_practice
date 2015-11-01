@@ -25,9 +25,7 @@ feature 'review' do
 
   context 'when user is not signed in' do
     scenario 'does not allow user to leave a review' do
-      visit restaurants_path
-      click_link 'Fat Duck'
-      click_link 'Review Fat Duck'
+      visit new_restaurant_review_path(restaurant)
       expect(current_path).to eq new_user_session_path
       expect(page).to have_content 'Email'
       expect(page).to have_content 'Password'

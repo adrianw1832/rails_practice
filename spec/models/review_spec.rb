@@ -5,6 +5,8 @@ describe Review, type: :model do
 
   it { is_expected.to belong_to :user }
 
+  it { is_expected.to have_many(:endorsements).dependent(:destroy) }
+
   it 'enforces uniqueness of user' do
     expect(create(:review)).to validate_uniqueness_of(:user)
   end

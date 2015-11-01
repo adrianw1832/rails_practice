@@ -54,9 +54,11 @@ feature 'restaurants' do
   end
 
   context 'viewing restaurants' do
-    let!(:restaurant) { create(:restaurant) }
+    let(:user) { create(:user) }
+    let!(:restaurant) { create(:restaurant, user: user) }
 
     scenario 'lets a user view a restaurant' do
+      sign_in_as(user)
       visit '/restaurants'
       click_link 'Fat Duck'
       expect(page).to have_content 'Fat Duck'
